@@ -15,9 +15,6 @@ app.use(express.urlencoded({extended:true}));
 
 app.use("/api/v1/user",require("./route/userRoutes"))
 
-app.get('/',(req,res)=>{
-    res.send("<h1>hello</h1>")
-})
 app.listen(process.env.PORT,()=>{
     console.log("server is listening");
 })
