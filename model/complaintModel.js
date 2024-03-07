@@ -13,12 +13,13 @@ const complaintSchema = new mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
+        validator:[validator.isEmail,"enter proper email"]
     },
     phone:{
         type:Number,
         required:[true,"phone no is required"],
-        unique:true
+        minlength:[10,"Enter min 10 digit number"],
+        maxLength:[10,"Enter max 10 digit number"]
     },
     idProofNumber:{
         type:String,
@@ -40,10 +41,14 @@ const complaintSchema = new mongoose.Schema({
     access:{
         type:Boolean,
         default:true // complain active to delete make false
+    },
+    postedBy:{
+        type:mongoose.Schema.ObjectId,
+        ref:'user',
+        required:true
     }
 });
 
 // const complaint=mongoose.model("complaint",complaintSchema);
 // export default complaint;
-
-module.exports = mongoose.model("Complaint",complaintSchema);
+module.exports=mongoose.model("complaint",complaintSchema);

@@ -103,14 +103,14 @@ const loginController = async(req,res) =>{
           });
         }
         const payload={
-          email:email,
+          email:user.email,
           id:user._id,
-          role:role
+          role:user.role
         }
         //for encrypt-> we use sign.
         //for decrypt-> we use verify.
-
-        const token = jwt.sign(payload,process.env.JWT_SECRET, {
+        const jwtsecret="atish";
+        let token = jwt.sign(payload,jwtsecret, {
           expiresIn:"1d",
         });
 
@@ -119,13 +119,14 @@ const loginController = async(req,res) =>{
           expires:new Date(Date.now()+3*24*60*60*1000),
           httpOnly:true,
       }
-        res.cookie(payload,token,options).status(200).json({
+        res.cookie("token",token,options).status(200).json({
           message:"login successful",
+          token,
           success:true
         })
     } catch (error) {
       console.log(error);
-      res.status(500).send({
+      return res.status(500).send({
         success:false,
         message:"Error in Login API",
         error

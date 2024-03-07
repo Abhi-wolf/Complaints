@@ -12,9 +12,19 @@ connectDb();
 //middlewares:
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+const cookieparser=require("cookie-parser");
+app.use(cookieparser());
 
+const complaint=require("./route/complaintRoute");
 app.use("/api/v1/user",require("./route/userRoutes"))
+app.use("/api/v1/complaint",complaint);
 
+//files upload
+// const multer  = require('multer')
+// const upload = multer({ dest: '/files' })
+// app.post("upload-files",upload.single("file"),async(req,res)=>{
+
+// })
 app.listen(process.env.PORT,()=>{
     console.log("server is listening");
 })

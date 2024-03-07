@@ -14,21 +14,21 @@ router.post("/login",loginController);
 
 
 //GET USER DATA || GET:
-router.get("/getUser",authMiddleware,getUserController);
+// router.get("/getUser",authMiddleware,getUserController);
 
 
-//UPDATE USER DATA || PUT:
-router.put("/updateUser",authMiddleware,updateUserController);
+// //UPDATE USER DATA || PUT:
+// router.put("/updateUser",authMiddleware,updateUserController);
 
 
 
-//UPDATE PASSWORD || POST:
-router.post("/updatePassword",authMiddleware,updatePasswordController);
+// //UPDATE PASSWORD || POST:
+// router.post("/updatePassword",authMiddleware,updatePasswordController);
 
-//RESET PASSWORD || POST:
-router.post("/resetPassword",authMiddleware,resetPasswordController);
+// //RESET PASSWORD || POST:
+// router.post("/resetPassword",authMiddleware,resetPasswordController);
 
-//DELETE THE USER || DELETE:
-router.delete("/deleteUser/:id",authMiddleware,deleteProfileController);
+// //DELETE THE USER || DELETE:
+// router.delete("/deleteUser/:id",authMiddleware,deleteProfileController);
 
 module.exports = router;
