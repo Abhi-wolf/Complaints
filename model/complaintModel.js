@@ -27,6 +27,7 @@ const complaintSchema = new mongoose.Schema({
         unique:true
     },
     //id proof image model
+    
     address:{
         type:String,
         required:true,
@@ -46,6 +47,13 @@ const complaintSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'user',
         required:true
+    },
+    idProofPdf:{
+        type:String,
+        // required:true,
+    },
+    writtenComplaint:{
+        type:String,
     }
 });
 
