@@ -52,4 +52,48 @@ const registerComplaint=async(req,res)=>{
         })
     }
 }
-module.exports={registerComplaint};
+const getComplaint=async(req,res)=>{
+    try{
+    const data=await complaintModel.find({});
+    console.log(data);
+    if(data){
+        return res.status(400).json({
+            message:"data fetch success",
+            success:true
+        })
+    }
+    else{
+        return res.status(500).json({
+            message:"complaint not fetch",
+            successs:true
+        })
+    }
+    }catch(err){
+        return res.status(500).json({
+            message:"error in geeting complaint",
+            success:false
+        })
+    }
+}
+const updateComplaint=async(req,res)=>{
+    const {id}=req.params;
+    let data=await complaintModel.findById(id);
+    if(!data)
+    {
+        return res.status(404).json({
+            message:"complaint not found",
+            success:false
+        })
+    }
+    complaintData=await complaintModel.findByIdAndUpdate(id,req.body,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    })
+    return res.status(200).json({
+        message:"complaint updated successfully",
+        success:true,
+        complaintData
+    })
+}
+module.exports={registerComplaint,getComplaint,updateComplaint};
