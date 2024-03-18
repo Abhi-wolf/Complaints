@@ -1,34 +1,20 @@
 const express = require("express");
 
-const {registerController,loginController, getUserController, updateUserController, deleteProfileController, updatePasswordController, resetPasswordController} = require("../controller/userController");
+const {registerController,loginController, getUserController, updateUserController, updatePasswordController} = require("../controller/userController");
 
-const authMiddleware = require("../middlewares/authMiddleware");
+// const authMiddleware = require("../middlewares/authMiddleware");
+const {isauth} =require("../middlewares/authMiddleware");
 // const {registerController,loginController}=require("../controller/userController");
 const router = express.Router();
 
-//REGISTER || POST:
 router.post("/register",registerController);
 
-//LOGIN || POST:
 router.post("/login",loginController);
 
+router.get("/getUser",isauth,getUserController);
 
-//GET USER DATA || GET:
-// router.get("/getUser",authMiddleware,getUserController);
+router.put("/updateUser",isauth,updateUserController);
 
-
-// //UPDATE USER DATA || PUT:
-// router.put("/updateUser",authMiddleware,updateUserController);
-
-
-
-// //UPDATE PASSWORD || POST:
-// router.post("/updatePassword",authMiddleware,updatePasswordController);
-
-// //RESET PASSWORD || POST:
-// router.post("/resetPassword",authMiddleware,resetPasswordController);
-
-// //DELETE THE USER || DELETE:
-// router.delete("/deleteUser/:id",authMiddleware,deleteProfileController);
+router.post("/updatePassword",isauth,updatePasswordController);
 
 module.exports = router;

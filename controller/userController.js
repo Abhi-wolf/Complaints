@@ -1,7 +1,7 @@
 const userModel = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const nodemailer=require('nodemailer');
 //function for register the user:
 const registerController = async(req,res)=> {
     try {
@@ -43,9 +43,9 @@ const registerController = async(req,res)=> {
             password:hashPassword,
             userid,
       });
-    
-      console.log(user);
 
+      console.log(user);
+      
       //if user created successfully:
       return res.status(201).send({
         success: true,
@@ -63,7 +63,6 @@ const registerController = async(req,res)=> {
     });
     }
 }
-
 
 const loginController = async(req,res) =>{
     try {
@@ -135,13 +134,11 @@ const loginController = async(req,res) =>{
 
 }
 
-
-//function for get the user data:
 const getUserController = async(req,res) => {
   try {
 
       //first  find the user:
-      const user = await userModel.findById({_id:req.body.id});
+      const user = await userModel.findById({_id:req.user.id});
 
       //validation of the user , if not then return error:
       if(!user)
@@ -170,62 +167,45 @@ const getUserController = async(req,res) => {
   }
 };
 
-
-//for update the user data:
 const updateUserController = async(req,res) =>{
   try {
       // first  find the user:
-      const user = await userModel.findById({_id: req.body.id});
-
+      const {id}=req.user;
+      let user = await userModel.findById({_id:id});
+      
       //validation of the user:
       if(!user)
       {
-          return res.status(404).sned({
+          return res.status(404).json({
               success:false,
               message:"User Not found"
           });
       }
-
-      // after then update the user data:
-      const {name,email,phone} = req.body;
-
-      if(name){
-          user.name = name; 
-      }
-      if(email){
-          user.email = email;
-      }
-      if(user.phone){
-          user.phone = phone;
-      }
-
-      //save the updated user data :
-      await user.save();
-
-      console.log(user);
-      
-      res.status(200).send({
-          success:true,
-          message:"User Updated Successfully"
+      userData=await userModel.findByIdAndUpdate(id,req.body,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
       })
-  } catch (error) {
-      console.log(error);
-      res.status(500).send({
-          success:false,
-          message:"Error in Updated User API",
-          error,
-      });
-  }
-};
+      return res.status(200).json({
+        message:"update successful",
+        success:true,
+        userData,
+      })
+    }catch(err){
+      console.log(err);
+      return res.status(500).json({
+        message:"error in updating",
+        success:false
+      })
+    }
+}
 
-
-// function for update user password : 
 const updatePasswordController = async (req, res) => {
   try {
 
     // first  find the user:
-    const user = await userModel.findById({ _id: req.body.id });
-
+    const user = await userModel.findById({ _id: req.user.id});
+   
     //validation of the user:
     if (!user) {
       return res.status(404).send({
@@ -279,72 +259,4 @@ const updatePasswordController = async (req, res) => {
   }
 };
 
-
-//function for reset the password:
-const resetPasswordController = async(req,res) =>{
-  try {
-      const {email, newPassword} = req.body;
-
-      if(!email || !newPassword){
-          return res.status(500).send({
-              success:false,
-              message:"Please Provide ALl fields"
-          });
-      };
-
-      const user = await userModel.findOne({email});
-
-      if(!user)
-      {
-          return res.status(500).send({
-              success:false,
-              message:"User Not Found or Invalid answer"
-          });
-      }
-
-      //hashing password:
-      var salt = bcrypt.genSaltSync(10);
-      const hashedPassword = await bcrypt.hash(newPassword,salt);
-
-      user.password = hashedPassword;
-
-      await user.save();
-
-      res.status(200).send({
-          success:true,
-          message:"Password reset successfully",
-      })
-  } catch (error) {
-      console.log(error);
-      res.status(500).send({
-          success:false,
-          message:"Error in Password Reset API",
-          error,
-      })
-  };
-}
-
-
-//DELETE PROFILE ACCOUNT:
-const deleteProfileController = async(req,res) =>{
-  try {
-      const id = req.params.id;
-      const user = await userModel.findByIdAndDelete(id);
-
-      console.log("delete user is : ",user);
-      return res.status(200).send({
-          success:true,
-          message:"Your account has been deleted",
-      });
-
-  } catch (error) {
-      console.log(error);
-      res.status(500).send({
-          success:false,
-          message:"Error In Delete Profile API",
-          error,
-      });
-  }
-}
-
-module.exports = {registerController,loginController,getUserController,updateUserController,updatePasswordController,deleteProfileController,resetPasswordController};
+module.exports = {registerController,loginController,getUserController,updateUserController,updatePasswordController};

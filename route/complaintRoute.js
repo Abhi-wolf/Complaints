@@ -1,5 +1,5 @@
 const express=require("express");
-const { registerComplaint, getComplaint, updateComplaint } = require("../controller/complaintController");
+const { registerComplaint, getAllComplaint, updateComplaint, deleteComplaint, getComplaint, showStaus, updateStatus } = require("../controller/complaintController");
 const {isauth } = require("../middlewares/authMiddleware");
 
 const router=express.Router();
@@ -31,6 +31,12 @@ const upload = require("../middlewares/multerMiddleware");
 // router.post('/complaint',isauth,upload.single("idProofPdf"),registerComplaint);
 router.post('/complaint', isauth, upload.fields([{ name: 'idProofPdf' },{ name: 'writtenComplaint' }]),registerComplaint);
 
-router.get('/getcomplaint',getComplaint);
-router.put('/update-details/:id',isauth,updateComplaint)
+router.get('/get-allcomplaint',getAllComplaint);
+router.put('/update-details/:id',isauth,updateComplaint);
+router.delete('/delete-complaint/:id',isauth,deleteComplaint);
+router.get("/get-complaint",isauth,getComplaint);
+
+router.get('/show-status/:id',showStaus);
+router.put('/update-status/:id',updateStatus);
+
 module.exports=router;

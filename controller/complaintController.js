@@ -52,14 +52,15 @@ const registerComplaint=async(req,res)=>{
         })
     }
 }
-const getComplaint=async(req,res)=>{
+const getAllComplaint=async(req,res)=>{
     try{
-    const data=await complaintModel.find({});
+    const allData=await complaintModel.find({});
     console.log(data);
     if(data){
         return res.status(400).json({
             message:"data fetch success",
-            success:true
+            success:true,
+            allData
         })
     }
     else{
@@ -96,4 +97,113 @@ const updateComplaint=async(req,res)=>{
         complaintData
     })
 }
-module.exports={registerComplaint,getComplaint,updateComplaint};
+const deleteComplaint=async(req,res)=>{
+    const {id}=req.params;
+    let complaint=await complaintModel.findById(id);
+    if(!complaint)
+    {
+        return res.status(404).json({
+            message:"complaint not found",
+            success:false
+        })
+    }
+    const datepre=new Date(complaint.createdAt);
+    const datenow=new Date(Date.now());
+    
+    let difference=datenow-datepre;
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const daysDifference = Math.floor(difference / millisecondsInDay);
+    const hoursDifference = Math.floor((difference % millisecondsInDay)/(1000 * 60 * 60));
+    console.log(daysDifference);
+    if(hoursDifference>6)
+    {
+        return res.status(401).json({
+            message:"complaint cannot withdraw",
+            success:false
+        })
+    }
+    else{
+        await complaint.deleteOne();
+        return res.status(200).json({
+            messgae:"Complaint Withdraw Success",
+            success:true
+        })
+    }
+}
+const getComplaint=async(req,res)=>{
+    try{
+        const complaintData=await complaintModel.find({postedBy:req.user._id});
+        if(complaintData){
+        return res.status(200).json({
+            message:"Complain get successfully",
+            success:true,
+            complaintData
+        })
+    }
+    else{
+        return res.status(404).json({
+            message:"complaint not found",
+            success:false
+        })
+    }
+    }catch(err){
+        return res.status(500).json({
+            message:"error in fetch data",
+            success:false
+        })
+    }
+}
+
+const updateStatus=async(req,res)=>{
+    try{
+        const {id}=req.params;
+        const {status}=req.body;
+
+        statusupdate=await complaintModel.findByIdAndUpdate(id,{status},{
+            new:true
+        })
+        let updatedstatus=statusupdate.status;
+        return res.status(200).json({
+            message:"status updated successfully",
+            success:true,
+            updatedstatus
+        })
+    }catch(err){
+        return res.status(500).json({
+            message:"error in status update",
+            success:false
+        })
+    }
+}
+const showStaus=async(req,res)=>{
+    // const enumValues = complaintModel.schema.path('status').enumValues;
+    // return res.status(200).json({
+    //     message:"status fetched success",
+    //     success:true,
+    //     enumValues
+    // })
+    const {id}=req.params;
+    try{
+        const data=await complaintModel.findById(id);
+        let status=data.status;
+        return res.status(200).json({
+            message:"status fetched successfully",
+            success:true,
+            status
+        })
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            mesage:"error in status",
+            success:false
+        })
+    }
+}
+module.exports={registerComplaint,
+    getAllComplaint,
+    updateComplaint,
+    deleteComplaint,
+    getComplaint,
+    updateStatus,
+    showStaus,
+};

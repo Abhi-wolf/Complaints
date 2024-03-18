@@ -54,8 +54,13 @@ const complaintSchema = new mongoose.Schema({
     },
     writtenComplaint:{
         type:String,
-    }
-});
+    },
+    status:{
+        type:String,
+        enum:['processing','forwarded to relevant department','complaint-Withdrawn','Solved'],
+        default:'processing'
+    },
+},{timestamps:true});
 
 // const complaint=mongoose.model("complaint",complaintSchema);
 // export default complaint;
