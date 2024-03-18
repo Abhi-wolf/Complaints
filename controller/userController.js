@@ -45,7 +45,28 @@ const registerController = async(req,res)=> {
       });
 
       console.log(user);
-      
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: '31golu.s@gmail.com', // your email
+            pass: 'gzem eiqq lmiw rbqe' // your password
+        }
+    });
+    let toEmail=req.body.email;
+    let mailOptions = {
+      from: '31golu.s@gmail.com', // sender address
+      to: toEmail, // list of receivers
+      subject: 'Welcome to our website!', // Subject line
+      html: `<p> Dear ${name} <br> Thank you for registering on our website!</p>` // HTML body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Email sent: ' + info.response);
+      }
+  });
       //if user created successfully:
       return res.status(201).send({
         success: true,
