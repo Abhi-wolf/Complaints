@@ -50,7 +50,7 @@ const complaintSchema = new mongoose.Schema({
     },
     idProofPdf:{
         type:String,
-        // required:true,
+        required:true,
     },
     writtenComplaint:{
         type:String,

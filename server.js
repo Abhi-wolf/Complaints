@@ -16,6 +16,8 @@ const cookieparser=require("cookie-parser");
 app.use(cookieparser());
 
 const complaint=require("./route/complaintRoute");
+const admin=require('./route/adminRoute');
+app.use('/api/v1/admin',admin);
 app.use("/api/v1/user",require("./route/userRoutes"))
 app.use("/api/v1/complaint",complaint);
 

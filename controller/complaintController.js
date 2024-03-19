@@ -55,8 +55,8 @@ const registerComplaint=async(req,res)=>{
 const getAllComplaint=async(req,res)=>{
     try{
     const allData=await complaintModel.find({});
-    console.log(data);
-    if(data){
+    console.log(allData);
+    if(allData){
         return res.status(400).json({
             message:"data fetch success",
             success:true,
@@ -70,6 +70,7 @@ const getAllComplaint=async(req,res)=>{
         })
     }
     }catch(err){
+        console.log(err);
         return res.status(500).json({
             message:"error in geeting complaint",
             success:false

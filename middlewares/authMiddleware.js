@@ -11,8 +11,7 @@ const isauth=async(req,res,next)=>{
             success:true
         })
     }
-    const jwtsecret="atish";
-    const decode=jwt.verify(token,jwtsecret);
+    const decode=jwt.verify(token,process.env.JWT_SECRET);
     req.user=await user.findById(decode.id);
         next();
     }catch(err){

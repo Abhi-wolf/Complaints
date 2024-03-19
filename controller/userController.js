@@ -28,7 +28,7 @@ const registerController = async(req,res)=> {
                 message: "Email Already Registerd please Login dont again login",
             });
         }
-    
+        
         //Hashing the user password:
         // const salt = bcrypt.genSaltSync(10);
 
@@ -87,10 +87,10 @@ const registerController = async(req,res)=> {
 
 const loginController = async(req,res) =>{
     try {
-        const {email, password,role} = req.body
+        const {email, password} = req.body
 
         //validification of the user:
-        if(!email || !password || !role)
+        if(!email || !password)
         {
           return res.status(500).send({
             success:false,
@@ -106,13 +106,6 @@ const loginController = async(req,res) =>{
               message:"user not found",
             });
         }
-        if(user.role!==role)
-        {
-                return res.status(500).json({
-                    message:"user role doesnot match",
-                    success:"false"
-                })
-        }
         // check user password || compare password:
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch)
@@ -125,12 +118,10 @@ const loginController = async(req,res) =>{
         const payload={
           email:user.email,
           id:user._id,
-          role:user.role
         }
         //for encrypt-> we use sign.
         //for decrypt-> we use verify.
-        const jwtsecret="atish";
-        let token = jwt.sign(payload,jwtsecret, {
+        let token = jwt.sign(payload,process.env.JWT_SECRET,{
           expiresIn:"1d",
         });
 
@@ -280,4 +271,13 @@ const updatePasswordController = async (req, res) => {
   }
 };
 
-module.exports = {registerController,loginController,getUserController,updateUserController,updatePasswordController};
+const logout=async(req,res)=>{
+  res.status(201).cookie("token","",{
+    httpOnly:true,
+    expires:new Date(Date.now()+3*24*60*60*1000),
+  }).json({
+      message:"logout successful!",
+      success:false,
+  });
+}
+module.exports = {registerController,loginController,getUserController,updateUserController,updatePasswordController,logout};
