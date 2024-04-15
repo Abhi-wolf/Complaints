@@ -9,6 +9,8 @@ const isauth = async (req, res, next) => {
       token = authHeader.split(" ")[1];
     }
 
+    console.log("authHeader :", authHeader);
+
     if (!token) {
       return res.status(400).json({
         message: "Token not found/Unauthorized user",

@@ -10,8 +10,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   const { role } = useAuth();
   const isAllowed = allowedRoles.includes(role);
-  console.log(isAllowed);
-  console.log(role);
+  // console.log(isAllowed);
+  // console.log(role);
 
   const accessibleRoute = isAllowed ? children : navigate("/login-user");
   return accessibleRoute;

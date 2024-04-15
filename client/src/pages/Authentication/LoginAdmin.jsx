@@ -38,7 +38,7 @@ export function LoginAdmin() {
           setCookie("token", user.data.token, { path: "/" });
           setUserDetail(user.data);
           toast.success("Logged in successfully");
-          navigate("/admin/profile/me");
+          navigate(`/admin/dashboard/${user.data.id}`);
         },
         onError: (err) => {
           toast.error(err.message);

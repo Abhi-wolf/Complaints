@@ -80,11 +80,11 @@ const adminLoginController = async (req, res) => {
       httpOnly: false,
     };
 
-    var { email, name, userid, role } = user;
+    var { email, name, _id: id, role } = user;
 
     return res.cookie("token", token, options).status(200).json({
       message: "admin login successful",
-      data: { email, name, userid, role, token },
+      data: { email, name, id, role, token },
       success: true,
     });
   } catch (err) {

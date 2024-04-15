@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <div
-      className={`min-w-full h-[80px] sm:px-4 md:px-8 flex items-center justify-between ${
+      className={`min-w-full h-[80px] px-4 md:px-8 flex items-center justify-between ${
         theme === "light" ? "bg-slate-100" : "bg-slate-300"
       }`}
     >

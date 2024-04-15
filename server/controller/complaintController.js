@@ -12,11 +12,13 @@ const registerComplaint = async (req, res) => {
   // const uploadpdf=await uploadCloudinary.uploadOnCloudinary(pdfFile);// function name uploadOnCloudinary created local file link sends
   // console.log(uploadpdf);
   const pdfFile1 = req.files?.idProofPdf?.[0]?.path; //multiple pdf image videos upload through this
-  const pdfFile2 = req.files?.writtenComplaint?.[0]?.path;
+  // const pdfFile2 = req.files?.writtenComplaint?.[0]?.path;
 
-  // const uploadpdf1 = await uploadCloudinary.uploadOnCloudinary(pdfFile1);
+  const uploadpdf1 = await uploadCloudinary.uploadOnCloudinary(pdfFile1);
   // const uploadpdf2 = await uploadCloudinary.uploadOnCloudinary(pdfFile2);
+  // console.log(req.body);
   // console.log(pdfFile1);
+  // console.log(uploadpdf1);
   // console.log(pdfFile2);
   const {
     fullName,
@@ -53,8 +55,7 @@ const registerComplaint = async (req, res) => {
       description,
       access: false,
       postedBy,
-      // idProofPdf:uploadpdf.url,
-      // idProofPdf: uploadpdf1.url,
+      idProofPdf: uploadpdf1 ? uploadpdf1.url : "",
       // writtenComplaint: uploadpdf2.url,
     });
     return res.status(200).json({
@@ -65,7 +66,7 @@ const registerComplaint = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "error in register complaints",
+      message: "Error in register complaints",
       success: false,
     });
   }
@@ -148,8 +149,6 @@ const deleteComplaint = async (req, res) => {
 
 // get all complaints by the user
 const getComplaint = async (req, res) => {
-  console.log("get compalint");
-
   try {
     const complaintData = await complaintModel.find({ postedBy: req.user._id });
     if (complaintData) {

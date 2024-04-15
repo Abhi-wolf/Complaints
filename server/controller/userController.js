@@ -130,17 +130,16 @@ const loginController = async (req, res) => {
       expiresIn: "1d",
     });
 
-    console.log("token is : ", token);
     const options = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       httpOnly: true,
     };
 
-    var { email, name, userid, role } = user;
+    var { email, name, id, role, _id } = user;
 
     res.cookie("token", token, options).status(200).json({
       message: "login successful",
-      data: { email, name, userid, token, role },
+      data: { email, name, id, token, role },
       success: true,
     });
   } catch (error) {

@@ -32,7 +32,7 @@ export function LoginUser() {
           setUserDetail(user.data);
           setCookie("token", user.data.token, { path: "/" });
           toast.success("Logged in successfully");
-          navigate("/user/profile/me");
+          navigate(`/user/dashboard/${user.data.id}`);
         },
         onError: (err) => {
           toast.error(err.message);

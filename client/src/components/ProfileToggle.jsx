@@ -8,14 +8,15 @@ import {
 import { useAuth } from "@/context/UserContext";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export function ProfileToggle() {
   const [cookies, setCookie] = useCookies(["token"]);
 
-  const { setUserDetail } = useAuth();
+  const { setUserDetail, userId } = useAuth();
   const navigate = useNavigate();
+  console.log("id = ", userId);
 
   function Logout() {
     setUserDetail({});
@@ -32,7 +33,7 @@ export function ProfileToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => navigate("/settings")}>
+        <DropdownMenuItem onClick={() => navigate(`/user/profile/${userId}`)}>
           Settings
         </DropdownMenuItem>
         <DropdownMenuItem onClick={Logout}>Logout</DropdownMenuItem>

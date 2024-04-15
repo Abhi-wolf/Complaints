@@ -6,6 +6,7 @@ import LoginAdmin from "@/pages/Authentication/LoginAdmin";
 import ProtectedRoute from "./ProtectedRoutes";
 import UserDashboard from "@/pages/Dashboard/UserDashboard";
 import AdminDashBoard from "@/pages/Dashboard/AdminDashBoard";
+import UserSettings from "@/pages/Settings/UserSettings";
 
 function Routers() {
   return (
@@ -15,7 +16,7 @@ function Routers() {
       <Route path="/login-admin" element={<LoginAdmin />} />
       <Route path="/signup" element={<SignUp />} />
       <Route
-        path="/user/profile/me"
+        path="/user/dashboard/:id"
         element={
           <ProtectedRoute allowedRoles={["user"]}>
             <UserDashboard />
@@ -24,10 +25,28 @@ function Routers() {
       />
 
       <Route
-        path="/admin/profile/me"
+        path="/user/profile/:id"
+        element={
+          <ProtectedRoute allowedRoles={["user"]}>
+            <UserSettings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/dashboard/:id"
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <AdminDashBoard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/profile/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserSettings />
           </ProtectedRoute>
         }
       />
