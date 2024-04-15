@@ -14,8 +14,10 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/UserContext";
 import { useLogin } from "./useLogin";
 import { toast } from "sonner";
+import { useCookies } from "react-cookie";
 
 export function LoginUser() {
+  const [cookies, setCookie] = useCookies(["token"]);
   const { register, reset, handleSubmit } = useForm();
   const { setUserDetail } = useAuth();
   const { login, isLoading } = useLogin();
@@ -28,6 +30,7 @@ export function LoginUser() {
         onSuccess: (user) => {
           reset();
           setUserDetail(user.data);
+          setCookie("token", user.data.token, { path: "/" });
           toast.success("Logged in successfully");
           navigate("/user/profile/me");
         },

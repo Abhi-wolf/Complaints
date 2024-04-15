@@ -2,9 +2,11 @@ const admin = require("../model/adminModel");
 const jwt = require("jsonwebtoken");
 const isadmin = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
-    console.log("token = ", token);
-    console.log("header = ", req.headers.Authorization);
+    let token;
+    let authHeader = req.headers.Authorization || req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer")) {
+      token = authHeader.split(" ")[1];
+    }
 
     if (!token) {
       return res.status(404).json({
@@ -13,10 +15,12 @@ const isadmin = async (req, res, next) => {
       });
     }
     const decode = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log(decode);
+
     req.admin = await admin.findById(decode.id);
     next();
   } catch (err) {
-    console.log(err);
     return res.status(500).json({
       message: "error in middleware",
       success: false,

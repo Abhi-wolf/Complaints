@@ -7,10 +7,11 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const [cookies] = useCookies(["token"]);
 
   if (!cookies.token) navigate("/login-user");
-  console.log(cookies);
 
-  const { user } = useAuth();
-  const isAllowed = allowedRoles.includes(user.role);
+  const { role } = useAuth();
+  const isAllowed = allowedRoles.includes(role);
+  console.log(isAllowed);
+  console.log(role);
 
   const accessibleRoute = isAllowed ? children : navigate("/login-user");
   return accessibleRoute;

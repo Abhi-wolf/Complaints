@@ -1,13 +1,16 @@
 import { getAllComplaintsAdmin } from "@/services/apiComplaints";
 import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
 
-export function useGetAllComplaints() {
+export function useGetAllComplaintsAdmin() {
+  const [cookies] = useCookies(["token"]);
+
   const {
     data: allComplaints,
     isLoading,
     error,
   } = useQuery({
-    queryFn: getAllComplaintsAdmin,
+    queryFn: () => getAllComplaintsAdmin(cookies.token),
     queryKey: ["allComplaints"],
   });
   return { allComplaints, error, isLoading };

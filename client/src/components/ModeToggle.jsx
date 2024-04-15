@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/context/ThemeContext";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();

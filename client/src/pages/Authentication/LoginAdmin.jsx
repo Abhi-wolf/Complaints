@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+const apiURL = import.meta.env.VITE_BASE_URL;
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,15 +28,15 @@ export function LoginAdmin() {
   const { login, isLoading } = useLogin();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     data = { ...data, role: "admin" };
     login(
       { data },
       {
         onSuccess: (user) => {
           reset();
-          setUserDetail(user.data);
           setCookie("token", user.data.token, { path: "/" });
+          setUserDetail(user.data);
           toast.success("Logged in successfully");
           navigate("/admin/profile/me");
         },

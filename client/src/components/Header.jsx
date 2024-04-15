@@ -1,23 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/UserContext";
-import { toast } from "sonner";
 import { UserModeToggle } from "./UserModeTogle";
+import { ProfileToggle } from "./ProfileToggle";
 
 function Header() {
   const { theme } = useTheme();
-  const { user, setUserDetail } = useAuth();
-  const navigate = useNavigate();
-
-  function Logout() {
-    setUserDetail({});
-    navigate("/login-user");
-    toast.success("Logged Out Successfully");
-  }
+  const { userName } = useAuth();
 
   return (
     <div
@@ -27,14 +19,12 @@ function Header() {
     >
       <Logo />
       <div className="flex items-center gap-1 md:gap-4">
-        {user.name ? (
-          <Button onClick={Logout}>Logout</Button>
-        ) : (
-          <UserModeToggle />
+        {userName ? <ProfileToggle /> : <UserModeToggle />}
+        {!userName && (
+          <Link to="/signup">
+            <Button>Sign Up</Button>
+          </Link>
         )}
-        <Link to="/signup">
-          <Button>Sign Up</Button>
-        </Link>
         <ModeToggle />
       </div>
     </div>

@@ -15,7 +15,7 @@ function Routers() {
       <Route path="/login-admin" element={<LoginAdmin />} />
       <Route path="/signup" element={<SignUp />} />
       <Route
-        path="/users/profile/me"
+        path="/user/profile/me"
         element={
           <ProtectedRoute allowedRoles={["user"]}>
             <UserDashboard />

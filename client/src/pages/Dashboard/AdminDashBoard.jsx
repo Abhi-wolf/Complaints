@@ -1,11 +1,15 @@
-import { useEffect } from "react";
-import { useGetAllComplaints } from "./useGetAllComplaints";
 import { Button } from "@/components/ui/button";
+import { useCookies } from "react-cookie";
+import { useGetAllComplaintsAdmin } from "./useGetAllComplaints";
 
 function AdminDashBoard() {
-  const { allComplaints, isLoading } = useGetAllComplaints();
+  const [cookies] = useCookies(["token"]);
+  const { allComplaints, isLoading } = useGetAllComplaintsAdmin();
 
   if (isLoading) return <h1>Loading</h1>;
+  else {
+    console.log(allComplaints);
+  }
 
   return (
     <div>

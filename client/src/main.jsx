@@ -7,10 +7,10 @@ import { CookiesProvider } from "react-cookie";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CookiesProvider defaultSetOptions={{ path: "/" }}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </CookiesProvider>
+    {/* <CookiesProvider defaultSetOptions={{ path: "/" }}> */}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+    {/* </CookiesProvider> */}
   </React.StrictMode>
 );

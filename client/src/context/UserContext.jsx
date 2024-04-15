@@ -1,25 +1,35 @@
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [userName, setUserName] = useState(localStorage.getItem("userName"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
+  const [user, setUser] = useState(localStorage.getItem("user"));
 
   function setUserDetail(newUser) {
     setUser(newUser);
+    setUserName(newUser.name);
+    setRole(newUser.role);
   }
 
-  // const contextValue = useMemo(
-  //   () => ({
-  //     user,
-  //     setUserDetail,
-  //   }),
-  //   [user]
-  // );
+  useEffect(() => {
+    if (user && userName) {
+      localStorage.setItem("user", user);
+      localStorage.setItem("userName", userName);
+      localStorage.setItem("role", role);
+    } else {
+      localStorage.removeItem("user");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("role");
+    }
+  }, [user, userName, role]);
 
   const contextValue = {
     user,
+    userName,
+    role,
     setUserDetail,
   };
 

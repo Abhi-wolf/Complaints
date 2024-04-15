@@ -71,15 +71,13 @@ const registerComplaint = async (req, res) => {
   }
 };
 const getAllComplaint = async (req, res) => {
-  console.log("get all complaints");
-
   try {
     const allData = await complaintModel.find({});
     if (allData) {
-      return res.status(400).json({
+      return res.status(200).json({
         message: "data fetch success",
         success: true,
-        allData,
+        data: allData,
       });
     } else {
       return res.status(500).json({
@@ -150,13 +148,15 @@ const deleteComplaint = async (req, res) => {
 
 // get all complaints by the user
 const getComplaint = async (req, res) => {
+  console.log("get compalint");
+
   try {
     const complaintData = await complaintModel.find({ postedBy: req.user._id });
     if (complaintData) {
       return res.status(200).json({
         message: "Complain get successfully",
         success: true,
-        complaintData,
+        data: complaintData,
       });
     } else {
       return res.status(404).json({
