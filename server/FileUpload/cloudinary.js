@@ -26,7 +26,7 @@ const uploadOnCloudinary = async (localFilePath) => {
         },
       },
       {
-        resourceType: "pdf",
+        resourceType: "auto",
       }
     );
     //file uploaded successfully

@@ -20,15 +20,18 @@ export function LoginUser() {
   const [cookies, setCookie] = useCookies(["token"]);
   const { register, reset, handleSubmit } = useForm();
   const { setUserDetail } = useAuth();
-  const { login, isLoading } = useLogin();
+  const { login, isPending } = useLogin();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
+    console.log(isPending);
     login(
       { data },
       {
         onSuccess: (user) => {
           reset();
+          console.log(isPending);
+
           setUserDetail(user.data);
           setCookie("token", user.data.token, { path: "/" });
           toast.success("Logged in successfully");
@@ -36,6 +39,8 @@ export function LoginUser() {
         },
         onError: (err) => {
           toast.error(err.message);
+          console.log(isPending);
+
           navigate("/login-user");
         },
       }
@@ -59,7 +64,7 @@ export function LoginUser() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                disabled={isLoading}
+                disabled={isPending}
                 required
                 {...register("email")}
               />
@@ -75,12 +80,12 @@ export function LoginUser() {
               <Input
                 id="password"
                 type="password"
-                disabled={isLoading}
+                disabled={isPending}
                 required
                 {...register("password")}
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>
           </form>

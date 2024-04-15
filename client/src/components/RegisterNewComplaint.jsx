@@ -17,9 +17,10 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 export function RegisterNewComplaint() {
-  const { register, handleSubmit } = useForm();
-  const { registerNewComplaint } = useRegisterComplaint();
+  const { register, handleSubmit, reset } = useForm();
+  const { registerNewComplaint, isPending } = useRegisterComplaint();
   const [document, setDocument] = useState(null);
+  const [isOpen, onClose] = useState(false);
 
   function handleFile(e) {
     console.log(e.target.files[0]);
@@ -27,25 +28,26 @@ export function RegisterNewComplaint() {
   }
 
   const onSubmit = (data) => {
-    console.log(data);
     data = { ...data, idProofPdf: document };
-    console.log(data);
     registerNewComplaint(
       { data },
       {
-        onSuccess: (complaint) => {
-          console.log(complaint);
+        onSuccess: () => {
+          reset();
           toast.success("Complaint successfully registered");
+          onClose(false);
         },
         onError: (err) => {
+          reset();
           toast.error(err.message);
+          onClose(false);
         },
       }
     );
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onClose} open={isOpen} modal defaultOpen={false}>
       <DialogTrigger asChild>
         <Button className="absolute right-1 bottom-2">
           Register New Complaint
@@ -69,6 +71,7 @@ export function RegisterNewComplaint() {
                 type="text"
                 placeholder="Pedro Duarte"
                 className="col-span-3"
+                disabled={isPending}
                 required
                 {...register("fullName")}
               />
@@ -82,6 +85,7 @@ export function RegisterNewComplaint() {
                 required
                 type="text"
                 placeholder="Geoffrey Chaucer"
+                disabled={isPending}
                 className="col-span-3"
                 {...register("fatherName")}
               />
@@ -95,6 +99,7 @@ export function RegisterNewComplaint() {
                 required
                 type="email"
                 placeholder="peduarte@emil.com"
+                disabled={isPending}
                 className="col-span-3"
                 {...register("email")}
               />
@@ -108,6 +113,7 @@ export function RegisterNewComplaint() {
                 type="tel"
                 placeholder="+919816253637"
                 pattern="[+]{1}[0-9]{11,14}"
+                disabled={isPending}
                 className="col-span-3"
                 required
                 {...register("phone")}
@@ -123,6 +129,7 @@ export function RegisterNewComplaint() {
                 required
                 type="text"
                 placeholder="JKEP827368"
+                disabled={isPending}
                 className="col-span-3"
                 {...register("idProofNumber")}
               />
@@ -137,6 +144,7 @@ export function RegisterNewComplaint() {
                 required
                 type="text"
                 placeholder="Hisar, Haryana"
+                disabled={isPending}
                 className="col-span-3"
                 {...register("address")}
               />
@@ -150,6 +158,7 @@ export function RegisterNewComplaint() {
                 id="description"
                 type="text"
                 placeholder="State your complain"
+                disabled={isPending}
                 className="col-span-3"
                 {...register("description")}
               />
@@ -160,17 +169,19 @@ export function RegisterNewComplaint() {
                 Upload Document
               </Label>
               <Input
-                id="address"
-                required
+                id="document"
                 type="file"
-                placeholder="Hisar, Haryana"
                 className="col-span-2"
+                disabled={isPending}
+                accept=".jpg, .jpeg"
                 onChange={(e) => handleFile(e)}
                 // {...register("address")}
               />
             </div>
           </div>
-          <Button type="submit">Register Complaint</Button>
+          <Button type="submit" disabled={isPending}>
+            Register Complaint
+          </Button>
         </form>
         <DialogFooter></DialogFooter>
       </DialogContent>
