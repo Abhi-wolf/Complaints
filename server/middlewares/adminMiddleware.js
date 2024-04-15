@@ -2,15 +2,17 @@ const admin = require("../model/adminModel");
 const jwt = require("jsonwebtoken");
 const isadmin = async (req, res, next) => {
   try {
-    const { admintoken } = req.cookies;
+    const { token } = req.cookies;
+    console.log("token = ", token);
+    console.log("header = ", req.headers.Authorization);
 
-    if (!admintoken) {
+    if (!token) {
       return res.status(404).json({
         message: "Token not found / Unauthorized access",
         success: false,
       });
     }
-    const decode = jwt.verify(admintoken, process.env.JWT_SECRET);
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
     req.admin = await admin.findById(decode.id);
     next();
   } catch (err) {

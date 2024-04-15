@@ -71,6 +71,8 @@ const registerComplaint = async (req, res) => {
   }
 };
 const getAllComplaint = async (req, res) => {
+  console.log("get all complaints");
+
   try {
     const allData = await complaintModel.find({});
     if (allData) {

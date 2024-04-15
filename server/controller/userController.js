@@ -8,6 +8,19 @@ const registerController = async (req, res) => {
     //sara data pahle le lena h:
     const { name, email, phone, password, userid } = req.body;
 
+    console.log(
+      "name:",
+      name,
+      " email: ",
+      email,
+      " phone: ",
+      phone,
+      " userid: ",
+      userid,
+      " password: ",
+      password
+    );
+
     //validation of the user:
     if (!name || !email || !phone || !password || !userid) {
       return res.status(500).send({
@@ -41,7 +54,6 @@ const registerController = async (req, res) => {
       userid,
     });
 
-    console.log(user);
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -65,10 +77,10 @@ const registerController = async (req, res) => {
       }
     });
     //if user created successfully:
+
     return res.status(201).send({
       success: true,
       message: "User is Successfully Registered",
-      user,
     });
   } catch (error) {
     console.log(error);
@@ -83,7 +95,7 @@ const registerController = async (req, res) => {
 
 const loginController = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    var { email, password } = req.body;
 
     //validification of the user:
     if (!email || !password) {
@@ -123,9 +135,12 @@ const loginController = async (req, res) => {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       httpOnly: true,
     };
+
+    var { email, name, userid } = user;
+
     res.cookie("token", token, options).status(200).json({
       message: "login successful",
-      token,
+      data: { email, name, userid },
       success: true,
     });
   } catch (error) {

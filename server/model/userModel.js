@@ -9,13 +9,13 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "email is required"],
-    validator:[validator.isEmail,"proper email is required"]
+    validator: [validator.isEmail, "proper email is required"],
   },
   phone: {
     type: String,
     required: [true, "phone no is required"],
-    minLength:[10,"minLength of phone is 10"],
-    maxLength:[10,"phone must be 10 digit"],
+    minLength: [13, "minLength of phone is 13"],
+    maxLength: [13, "phone must be 13 digit"],
   },
   password: {
     type: String,
@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   userid: {
     type: String,
     required: true,
-    unique:true
-  }
+    unique: true,
+  },
 });
 
 module.exports = mongoose.model("user", userSchema);
