@@ -123,6 +123,7 @@ const loginController = async (req, res) => {
     const payload = {
       email: user.email,
       id: user._id,
+      role: user.role,
     };
     //for encrypt-> we use sign.
     //for decrypt-> we use verify.

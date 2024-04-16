@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoutes";
 import UserDashboard from "@/pages/Dashboard/UserDashboard";
 import AdminDashBoard from "@/pages/Dashboard/AdminDashBoard";
 import UserSettings from "@/pages/Settings/UserSettings";
+import Complain from "@/pages/Complain/Complain";
 
 function Routers() {
   return (
@@ -47,6 +48,15 @@ function Routers() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <UserSettings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/complain/:complaintId"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "user"]}>
+            <Complain />
           </ProtectedRoute>
         }
       />

@@ -7,36 +7,18 @@ const {
   getComplaint,
   showStaus,
   updateStatus,
+  getUserComplaints,
 } = require("../controller/complaintController");
 const { isauth } = require("../middlewares/authMiddleware");
 const { isadmin } = require("../middlewares/adminMiddleware");
 const router = express.Router();
-// const complaintModel=require("../model/complaintModel");
-// const multer  = require('multer');
-
-// const fs = require('fs');
 const { up } = require("../middlewares/multerMiddleware");
 const upload = require("../middlewares/multerMiddleware");
+const {
+  isAuthorized,
+  isAdminOrUser,
+} = require("../middlewares/adminOrUserMiddleWare");
 
-// const destination = './temp';
-
-// if (!fs.existsSync(destination)) {
-//   fs.mkdirSync(destination);
-// }
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, destination);
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now();
-//     cb(null, uniqueSuffix + file.originalname);
-//   }
-// });
-// const upload = multer({ storage: storage });
-// router.post('/complaint',isauth,upload.single("idProofPdf"),registerComplaint);
-
-// router.post('/complaint',isauth,upload.single("idProofPdf"),registerComplaint);
 router.post(
   "/register-complaint",
   isauth,
@@ -46,8 +28,9 @@ router.post(
 
 router.get("/get-allcomplaint", isadmin, getAllComplaint);
 router.put("/update-details/:id", isauth, updateComplaint);
-router.delete("/delete-complaint/:id", isauth, deleteComplaint);
-router.get("/get-complaint", isauth, getComplaint);
+router.delete("/delete-complaint", isauth, deleteComplaint);
+router.get("/get-usercomplaints", isauth, getUserComplaints);
+router.get("/get-complaint/:id", isAuthorized, isAdminOrUser, getComplaint);
 
 router.get("/show-status/:id", showStaus);
 router.put("/update-status/:id", isadmin, updateStatus);

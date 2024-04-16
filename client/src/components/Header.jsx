@@ -19,6 +19,10 @@ function Header() {
     >
       <Logo />
       <div className="flex items-center gap-1 md:gap-4">
+        <h5 className="text-violet-800 underline underline-offset-4 text-sm md:text-xl">
+          {userName ? userName : ""}
+        </h5>
+
         {userName ? <ProfileToggle /> : <UserModeToggle />}
         {!userName && (
           <Link to="/signup">

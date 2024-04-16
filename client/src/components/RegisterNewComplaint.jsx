@@ -49,7 +49,10 @@ export function RegisterNewComplaint() {
   return (
     <Dialog onOpenChange={onClose} open={isOpen} modal defaultOpen={false}>
       <DialogTrigger asChild>
-        <Button className="absolute right-1 bottom-2">
+        <Button
+          className="fixed right-1 bottom-2 bg-green-400"
+          variant="secondary"
+        >
           Register New Complaint
         </Button>
       </DialogTrigger>

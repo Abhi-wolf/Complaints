@@ -115,7 +115,7 @@ const updateComplaint = async (req, res) => {
   });
 };
 const deleteComplaint = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   let complaint = await complaintModel.findById(id);
   if (!complaint) {
     return res.status(404).json({
@@ -127,13 +127,15 @@ const deleteComplaint = async (req, res) => {
   const datenow = new Date(Date.now());
 
   let difference = datenow - datepre;
-  const millisecondsInDay = 1000 * 60 * 60 * 24;
+  const millisecondsInDay = 1000 * 60 * 60 * 24 * 7;
   const daysDifference = Math.floor(difference / millisecondsInDay);
+
   const hoursDifference = Math.floor(
-    (difference % millisecondsInDay) / (1000 * 60 * 60)
+    (difference % millisecondsInDay) / (1000 * 60 * 60 * 24)
   );
   console.log(daysDifference);
-  if (hoursDifference <= 6) {
+
+  if (hoursDifference <= 7 && !complaint.access) {
     await complaint.deleteOne();
     return res.status(200).json({
       message: "Complaint Withdraw Success",
@@ -147,8 +149,36 @@ const deleteComplaint = async (req, res) => {
   }
 };
 
-// get all complaints by the user
+// get a single complaint
 const getComplaint = async (req, res) => {
+  const { id } = req.params;
+  // console.log("id = ", id);
+  // console.log("params = ", req.params);
+
+  try {
+    const complaintData = await complaintModel.findById(id);
+
+    if (complaintData) {
+      return res.status(200).json({
+        message: "Complain get successfully",
+        success: true,
+        data: complaintData,
+      });
+    } else {
+      return res.status(404).json({
+        message: "Complaint not found",
+        success: false,
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "error in fetch data",
+      success: false,
+    });
+  }
+};
+
+const getUserComplaints = async (req, res) => {
   try {
     const complaintData = await complaintModel.find({ postedBy: req.user._id });
     if (complaintData) {
@@ -228,7 +258,8 @@ module.exports = {
   getAllComplaint,
   updateComplaint,
   deleteComplaint,
-  getComplaint,
+  getUserComplaints,
   updateStatus,
   showStaus,
+  getComplaint,
 };

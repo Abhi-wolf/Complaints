@@ -16,12 +16,11 @@ export function ProfileToggle() {
 
   const { setUserDetail, userId } = useAuth();
   const navigate = useNavigate();
-  console.log("id = ", userId);
 
   function Logout() {
     setUserDetail({});
     setCookie("token", null, { path: "/" });
-    navigate("/login-user");
+    navigate("/login-user", { replace: true });
     toast.success("Logged Out Successfully");
   }
 

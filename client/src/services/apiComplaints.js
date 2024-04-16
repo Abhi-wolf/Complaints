@@ -11,7 +11,7 @@ export async function getAllComplaintsAdmin(token) {
       },
     });
     complaints = res.data;
-    console.log(complaints);
+    // console.log(complaints);
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
@@ -24,13 +24,13 @@ export async function getAllComplaintsAdmin(token) {
 export async function getAllComplaint(token) {
   let complaints = [];
   try {
-    const res = await axios.get(`${apiURL}/complaint/get-complaint`, {
+    const res = await axios.get(`${apiURL}/complaint/get-usercomplaints`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    complaints = res.data;
-    console.log(complaints);
+    complaints = res.data.data;
+    // console.log(complaints);
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
@@ -41,8 +41,6 @@ export async function getAllComplaint(token) {
 
 // register new complaint
 export async function registerComplaint({ data }, token) {
-  console.log("data = ", data);
-  console.log("token = ", token);
   let complaint = {};
 
   try {
@@ -58,6 +56,46 @@ export async function registerComplaint({ data }, token) {
     );
 
     complaint = res.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.message);
+  }
+
+  return complaint;
+}
+
+export async function deleteComplaint({ id }, token) {
+  try {
+    const res = await axios.delete(`${apiURL}/complaint/delete-complaint`, {
+      data: { id }, // Pass the data as part of the config object
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(res);
+    // complaint = res.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.message);
+  }
+
+  return {};
+}
+
+export async function getComplaint(id, token) {
+  console.log("token = ", token);
+  console.log("id = ", id);
+
+  let complaint = {};
+  try {
+    const res = await axios.get(`${apiURL}/complaint/get-complaint/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    complaint = res.data.data;
+    console.log(complaint);
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
