@@ -123,3 +123,35 @@ export async function getComplaint(id, token) {
 
   return complaint;
 }
+
+export async function updateStatusOfComplaint({ data }, token) {
+  // console.log("data = ", data);
+  // console.log("token = ", token);
+
+  const { selectedPosition: status, id } = data;
+  // console.log(status, id);
+  let response = {};
+
+  try {
+    const res = await axios.put(
+      `${apiURL}/complaint/update-status/${id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    response = res.data;
+    console.log(response);
+  } catch (err) {
+    console.log(err);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
+  }
+
+  return response;
+}

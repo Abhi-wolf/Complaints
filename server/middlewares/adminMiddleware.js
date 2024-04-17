@@ -8,6 +8,8 @@ const isadmin = async (req, res, next) => {
       token = authHeader.split(" ")[1];
     }
 
+    // console.log("authHeader = ", authHeader);
+
     if (!token) {
       return res.status(404).json({
         message: "Token not found / Unauthorized access",
@@ -15,8 +17,6 @@ const isadmin = async (req, res, next) => {
       });
     }
     const decode = jwt.verify(token, process.env.JWT_SECRET);
-
-    console.log(decode);
 
     req.admin = await admin.findById(decode.id);
     next();

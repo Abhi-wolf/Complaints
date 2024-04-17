@@ -210,8 +210,6 @@ const updateStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    console.log(status);
-
     if (!complaintModel.schema.path("status").enumValues.includes(status)) {
       return res.status(400).json({
         success: false,

@@ -14,7 +14,7 @@ import { toast } from "sonner";
 export function ProfileToggle() {
   const [cookies, setCookie] = useCookies(["token"]);
 
-  const { setUserDetail, userId } = useAuth();
+  const { setUserDetail, userId, role } = useAuth();
   const navigate = useNavigate();
 
   function Logout() {
@@ -32,7 +32,9 @@ export function ProfileToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => navigate(`/user/profile/${userId}`)}>
+        <DropdownMenuItem
+          onClick={() => navigate(`/${role}/profile/${userId}`)}
+        >
           Settings
         </DropdownMenuItem>
         <DropdownMenuItem onClick={Logout}>Logout</DropdownMenuItem>

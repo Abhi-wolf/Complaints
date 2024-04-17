@@ -27,12 +27,13 @@ import { useAuth } from "@/context/UserContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useUpdateStatus } from "@/pages/Dashboard/useUpdateStatus";
+import { useQueryClient } from "@tanstack/react-query";
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -43,10 +44,13 @@ function formatDate(dateString) {
 
 function ComplaintCard({ complain, view }) {
   const navigate = useNavigate();
-  const [isOpen, onClose] = useState(false);
-  const { deleteComplaint, isPending } = useDeleteComplaint();
   const { role } = useAuth();
-  const [position, setPosition] = useState("processing");
+  const [isOpen, onClose] = useState(false);
+  // const [position, setPosition] = useState("processing");
+
+  const { deleteComplaint, isPending } = useDeleteComplaint();
+  const { updateStatus, isPending: isUpdating } = useUpdateStatus();
+  const queryClient = useQueryClient();
 
   const {
     fullName,
@@ -62,7 +66,21 @@ function ComplaintCard({ complain, view }) {
 
   function handleStatusChange(selectedPosition) {
     console.log("status = ", selectedPosition);
-    setPosition(selectedPosition);
+    // setPosition(selectedPosition);
+
+    const data = { selectedPosition, id };
+    updateStatus(
+      { data },
+      {
+        onSuccess: (res) => {
+          toast.success(`Status updated to ${res?.updatedstatus}`);
+          queryClient.invalidateQueries(["complaint", id]);
+        },
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      }
+    );
   }
 
   function handleDelete(id) {
@@ -86,7 +104,7 @@ function ComplaintCard({ complain, view }) {
     <div>
       <Card className="w-[350px] md:w-[450px]">
         <CardHeader>
-          <CardTitle>Complain</CardTitle>
+          <CardTitle className="text-slate-500">{fullName}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4">
@@ -97,12 +115,7 @@ function ComplaintCard({ complain, view }) {
                   {formatDate(createdAt)}
                 </span>
               </div>
-              <div className="flex justify-between items-center">
-                <p className="text-md text-muted-foreground">Name </p>
-                <span className="scroll-m-20 text-md font-semibold tracking-tight pl-1">
-                  {fullName}
-                </span>
-              </div>
+
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">Father Name :</p>
                 <span className="scroll-m-20 text-md font-semibold tracking-tight pl-1">
@@ -130,35 +143,49 @@ function ComplaintCard({ complain, view }) {
 
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">Status :</p>
-                {role === "user" && <Badge>{status}</Badge>}
+                {role === "user" && (
+                  <Badge
+                    className={`rounded-full text-xs md:text-sm ${
+                      status === "rejected" && "bg-red-500"
+                    } ${status === "solved" && "bg-green-500"} ${
+                      status === "processing" && "bg-yellow-500"
+                    } ${
+                      status === "forwarded to relevant department" &&
+                      "bg-orange-500"
+                    } `}
+                  >
+                    {status}
+                  </Badge>
+                )}
 
                 {role === "admin" && (
                   <div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
-                          className={`rounded-full text-sm ${
-                            position === "rejected" && "bg-red-500"
-                          } ${position === "solved" && "bg-green-500"} ${
-                            position === "processing" && "bg-violet-500"
+                          disabled={isUpdating}
+                          className={`rounded-full text-xs md:text-sm  ${
+                            status === "rejected" && "bg-red-500"
+                          } ${status === "solved" && "bg-green-500"} ${
+                            status === "processing" && "bg-yellow-500"
                           } ${
-                            position === "forwarded to relevant department" &&
+                            status === "forwarded to relevant department" &&
                             "bg-orange-500"
                           } `}
                         >
-                          {position}
+                          {status}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-36">
                         {/* <DropdownMenuLabel>Panel Position</DropdownMenuLabel> */}
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup
-                          value={position}
+                          value={status}
                           onValueChange={handleStatusChange}
                         >
                           <DropdownMenuRadioItem
                             value="processing"
-                            className="text-violet-500 font-semibold"
+                            className="text-yellow-500 font-semibold"
                           >
                             Processing
                           </DropdownMenuRadioItem>

@@ -2,18 +2,12 @@ import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "./ui/button";
-import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/UserContext";
 import { UserModeToggle } from "./UserModeTogle";
 import { ProfileToggle } from "./ProfileToggle";
 
 function Header() {
-  const { theme } = useTheme();
-  const { userName } = useAuth();
-
-  //  ${
-  //   theme === "light" ? "bg-slate-100" : "bg-slate-300"
-  // }`
+  const { userName, role, userId } = useAuth();
 
   return (
     <div
@@ -21,9 +15,12 @@ function Header() {
     >
       <Logo />
       <div className="flex items-center gap-1 md:gap-4">
-        <h5 className="text-violet-800 underline underline-offset-4 text-sm md:text-xl">
+        <Link
+          to={`/${role}/dashboard/${userId}`}
+          className="text-emerald-500 underline underline-offset-4 text-sm md:text-xl"
+        >
           {userName ? userName : ""}
-        </h5>
+        </Link>
 
         {userName ? <ProfileToggle /> : <UserModeToggle />}
         {!userName && (

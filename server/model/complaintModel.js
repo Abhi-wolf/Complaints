@@ -60,8 +60,8 @@ const complaintSchema = new mongoose.Schema(
       enum: [
         "processing",
         "forwarded to relevant department",
-        "complaint-Withdrawn",
-        "Solved",
+        "rejected",
+        "solved",
       ],
       default: "processing",
     },

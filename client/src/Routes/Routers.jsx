@@ -8,6 +8,7 @@ import UserDashboard from "@/pages/Dashboard/UserDashboard";
 import AdminDashBoard from "@/pages/Dashboard/AdminDashBoard";
 import UserSettings from "@/pages/Settings/UserSettings";
 import Complain from "@/pages/Complain/Complain";
+import AdminSettings from "@/pages/Settings/AdminSettings";
 
 function Routers() {
   return (
@@ -47,7 +48,7 @@ function Routers() {
         path="/admin/profile/:id"
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
-            <UserSettings />
+            <AdminSettings />
           </ProtectedRoute>
         }
       />
