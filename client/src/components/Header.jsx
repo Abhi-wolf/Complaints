@@ -11,11 +11,13 @@ function Header() {
   const { theme } = useTheme();
   const { userName } = useAuth();
 
+  //  ${
+  //   theme === "light" ? "bg-slate-100" : "bg-slate-300"
+  // }`
+
   return (
     <div
-      className={`min-w-full h-[80px] px-4 md:px-8 flex items-center justify-between ${
-        theme === "light" ? "bg-slate-100" : "bg-slate-300"
-      }`}
+      className={`min-w-full h-[80px] px-4 md:px-8 flex items-center justify-between shadow-xl shadow-indigo-500/50`}
     >
       <Logo />
       <div className="flex items-center gap-1 md:gap-4">

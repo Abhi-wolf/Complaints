@@ -9,7 +9,11 @@ export async function signup({ data }) {
     userDetail = res.data;
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return userDetail;
@@ -27,6 +31,14 @@ export async function login({ data }) {
     }
   } catch (err) {
     console.log(err);
+    if (err.response) {
+      // The request was made and the server responded with a status code
+      console.log(err.response.data); // Server response data
+      console.log(err.response.status); // Status code
+      console.log(err.response.headers); // Response headers
+
+      throw new Error(err.response.data.message);
+    }
     throw new Error(err.message);
   }
 

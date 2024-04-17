@@ -39,8 +39,7 @@ export function LoginUser() {
         },
         onError: (err) => {
           toast.error(err.message);
-          console.log(isPending);
-
+          reset();
           navigate("/login-user");
         },
       }

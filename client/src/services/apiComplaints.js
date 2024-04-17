@@ -10,11 +10,15 @@ export async function getAllComplaintsAdmin(token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    complaints = res.data;
+    complaints = res.data.data;
     // console.log(complaints);
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return complaints;
@@ -33,7 +37,11 @@ export async function getAllComplaint(token) {
     // console.log(complaints);
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return complaints;
@@ -58,7 +66,11 @@ export async function registerComplaint({ data }, token) {
     complaint = res.data;
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return complaint;
@@ -72,11 +84,15 @@ export async function deleteComplaint({ id }, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log(res);
+    console.log(res);
     // complaint = res.data;
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return {};
@@ -98,7 +114,11 @@ export async function getComplaint(id, token) {
     console.log(complaint);
   } catch (err) {
     console.log(err);
-    throw new Error(err.message);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    } else {
+      throw new Error(err.message);
+    }
   }
 
   return complaint;

@@ -23,6 +23,16 @@ import { useState } from "react";
 import { useDeleteComplaint } from "@/pages/Dashboard/useDeleteComplaint";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/UserContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -35,6 +45,8 @@ function ComplaintCard({ complain, view }) {
   const navigate = useNavigate();
   const [isOpen, onClose] = useState(false);
   const { deleteComplaint, isPending } = useDeleteComplaint();
+  const { role } = useAuth();
+  const [position, setPosition] = useState("processing");
 
   const {
     fullName,
@@ -47,6 +59,11 @@ function ComplaintCard({ complain, view }) {
     access,
     _id: id,
   } = complain;
+
+  function handleStatusChange(selectedPosition) {
+    console.log("status = ", selectedPosition);
+    setPosition(selectedPosition);
+  }
 
   function handleDelete(id) {
     console.log(id);
@@ -110,10 +127,64 @@ function ComplaintCard({ complain, view }) {
                   {phone}
                 </span>
               </div>
+
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">Status :</p>
+                {role === "user" && <Badge>{status}</Badge>}
 
-                <Badge>{status}</Badge>
+                {role === "admin" && (
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className={`rounded-full text-sm ${
+                            position === "rejected" && "bg-red-500"
+                          } ${position === "solved" && "bg-green-500"} ${
+                            position === "processing" && "bg-violet-500"
+                          } ${
+                            position === "forwarded to relevant department" &&
+                            "bg-orange-500"
+                          } `}
+                        >
+                          {position}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-36">
+                        {/* <DropdownMenuLabel>Panel Position</DropdownMenuLabel> */}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup
+                          value={position}
+                          onValueChange={handleStatusChange}
+                        >
+                          <DropdownMenuRadioItem
+                            value="processing"
+                            className="text-violet-500 font-semibold"
+                          >
+                            Processing
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            value="forwarded to relevant department"
+                            className="text-orange-500 font-semibold"
+                          >
+                            Forwarded
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            value="solved"
+                            className="text-green-500 font-semibold"
+                          >
+                            Solved
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            value="rejected"
+                            className="text-red-700 font-semibold"
+                          >
+                            Rejected
+                          </DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <p className="text-md text-muted-foreground">Created On :</p>
@@ -134,34 +205,36 @@ function ComplaintCard({ complain, view }) {
             </Button>
           )}
 
-          <AlertDialog
-            onOpenChange={onClose}
-            open={isOpen}
-            modal
-            defaultOpen={false}
-          >
-            <AlertDialogTrigger>
-              <Button variant="destructive" disabled={access}>
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                {/* <AlertDialogAction>Continue</AlertDialogAction> */}
-                <Button onClick={() => handleDelete(id)} disabled={isPending}>
-                  Continue
+          {role === "user" && (
+            <AlertDialog
+              onOpenChange={onClose}
+              open={isOpen}
+              modal
+              defaultOpen={false}
+            >
+              <AlertDialogTrigger disabled={access}>
+                <Button variant="destructive" disabled={access}>
+                  Delete
                 </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  {/* <AlertDialogAction>Continue</AlertDialogAction> */}
+                  <Button onClick={() => handleDelete(id)} disabled={isPending}>
+                    Continue
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </CardFooter>
       </Card>
     </div>

@@ -135,7 +135,11 @@ const deleteComplaint = async (req, res) => {
   );
   console.log(daysDifference);
 
-  if (hoursDifference <= 7 && !complaint.access) {
+  if (
+    hoursDifference <= 7 &&
+    !complaint.access &&
+    complaint.status === "processing"
+  ) {
     await complaint.deleteOne();
     return res.status(200).json({
       message: "Complaint Withdraw Success",
@@ -143,7 +147,7 @@ const deleteComplaint = async (req, res) => {
     });
   } else {
     return res.status(401).json({
-      message: "complaint cannot withdraw",
+      message: "Complaint cannot be withdraw",
       success: false,
     });
   }

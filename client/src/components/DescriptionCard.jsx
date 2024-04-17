@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 
+import { useAuth } from "@/context/UserContext";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -11,6 +12,8 @@ import {
 } from "./ui/card";
 
 function DescriptionCard({ description = "" }) {
+  const { role } = useAuth();
+
   return (
     <div className="mt-8">
       <Card className=" md:w-[80%] mx-auto">
@@ -25,7 +28,7 @@ function DescriptionCard({ description = "" }) {
           </div>
         </CardContent>
         <CardFooter className="flex justify-center md:justify-end">
-          <Button>Update</Button>
+          {role === "user" && <Button>Update</Button>}
         </CardFooter>
       </Card>
     </div>

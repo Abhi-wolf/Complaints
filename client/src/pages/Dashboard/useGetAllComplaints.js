@@ -7,11 +7,11 @@ export function useGetAllComplaintsAdmin() {
 
   const {
     data: allComplaints,
-    isLoading,
+    isPending,
     error,
   } = useQuery({
     queryFn: () => getAllComplaintsAdmin(cookies.token),
     queryKey: ["allComplaints"],
   });
-  return { allComplaints, error, isLoading };
+  return { allComplaints, error, isPending };
 }

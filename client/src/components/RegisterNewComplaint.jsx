@@ -49,10 +49,7 @@ export function RegisterNewComplaint() {
   return (
     <Dialog onOpenChange={onClose} open={isOpen} modal defaultOpen={false}>
       <DialogTrigger asChild>
-        <Button
-          className="fixed right-1 bottom-2 bg-green-400"
-          variant="secondary"
-        >
+        <Button className="fixed right-1 bottom-2 " variant="outline">
           Register New Complaint
         </Button>
       </DialogTrigger>
@@ -178,13 +175,23 @@ export function RegisterNewComplaint() {
                 disabled={isPending}
                 accept=".jpg, .jpeg"
                 onChange={(e) => handleFile(e)}
-                // {...register("address")}
               />
             </div>
           </div>
-          <Button type="submit" disabled={isPending}>
-            Register Complaint
-          </Button>
+          <div className="flex justify-between">
+            <Button
+              disabled={isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                reset();
+              }}
+            >
+              Reset
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              Register Complaint
+            </Button>
+          </div>
         </form>
         <DialogFooter></DialogFooter>
       </DialogContent>
