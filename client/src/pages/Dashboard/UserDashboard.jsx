@@ -141,7 +141,7 @@ function UserDashboard() {
       </div>
 
       <div className=" flex flex-wrap gap-5 justify-center mx-4 my-8">
-        {filTeredComplaints.length == 0 ? (
+        {filTeredComplaints.length === 0 ? (
           <NoData />
         ) : (
           filTeredComplaints.map((complain) => (
