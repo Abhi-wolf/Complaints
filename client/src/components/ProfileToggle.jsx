@@ -8,7 +8,7 @@ import {
 import { useAuth } from "@/context/UserContext";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { useCookies } from "react-cookie";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export function ProfileToggle() {

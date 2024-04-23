@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const [cookies] = useCookies(["token"]);
   const [userName, setUserName] = useState(localStorage.getItem("userName"));
   const [role, setRole] = useState(localStorage.getItem("role"));
   // const [user, setUser] = useState(localStorage.getItem("user"));
@@ -17,8 +19,9 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    if (role && userName) {
+    if (role && userName && cookies.token) {
       // localStorage.setItem("user", user);
+      console.log("cookies = ", cookies);
       localStorage.setItem("userName", userName);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", userId);
@@ -27,7 +30,7 @@ export function AuthProvider({ children }) {
       localStorage.removeItem("userName");
       localStorage.removeItem("userId");
     }
-  }, [userName, role, userId]);
+  }, [userName, role, userId, cookies]);
 
   const contextValue = {
     userName,

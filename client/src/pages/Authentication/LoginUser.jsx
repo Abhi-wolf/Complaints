@@ -15,8 +15,11 @@ import { useAuth } from "@/context/UserContext";
 import { useLogin } from "./useLogin";
 import { toast } from "sonner";
 import { useCookies } from "react-cookie";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
 
 export function LoginUser() {
+  const [seePassword, setSeePassword] = useState(false);
   const [cookies, setCookie] = useCookies(["token"]);
   const { register, reset, handleSubmit } = useForm();
   const { setUserDetail } = useAuth();
@@ -76,13 +79,27 @@ export function LoginUser() {
                 </Link>
               </div>
 
-              <Input
-                id="password"
-                type="password"
-                disabled={isPending}
-                required
-                {...register("password")}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={seePassword ? "text" : "password"}
+                  disabled={isPending}
+                  required
+                  {...register("password")}
+                />
+
+                {!seePassword ? (
+                  <EyeOffIcon
+                    className="absolute right-2 bottom-2 cursor-pointer"
+                    onClick={() => setSeePassword(true)}
+                  />
+                ) : (
+                  <EyeIcon
+                    className="absolute right-2 bottom-2 cursor-pointer"
+                    onClick={() => setSeePassword(false)}
+                  />
+                )}
+              </div>
             </div>
             <Button type="submit" className="w-full" disabled={isPending}>
               Login

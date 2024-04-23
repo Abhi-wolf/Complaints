@@ -11,9 +11,8 @@ export async function signup({ data }) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return userDetail;

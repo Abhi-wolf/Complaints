@@ -1,5 +1,5 @@
 import Home from "@/pages/Home";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SignUp from "@/pages/Authentication/SignUp";
 import LoginUser from "@/pages/Authentication/LoginUser";
 import LoginAdmin from "@/pages/Authentication/LoginAdmin";
@@ -9,8 +9,21 @@ import AdminDashBoard from "@/pages/Dashboard/AdminDashBoard";
 import UserSettings from "@/pages/Settings/UserSettings";
 import Complain from "@/pages/Complain/Complain";
 import AdminSettings from "@/pages/Settings/AdminSettings";
+import { useAuth } from "@/context/UserContext";
+import { useEffect } from "react";
 
 function Routers() {
+  const { userName } = useAuth();
+
+  useEffect(
+    function () {
+      if (!userName === "") {
+        <Navigate to="/login-user" replace="true" />;
+      }
+    },
+    [userName]
+  );
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />

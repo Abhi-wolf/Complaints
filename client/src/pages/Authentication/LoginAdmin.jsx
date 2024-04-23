@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-const apiURL = import.meta.env.VITE_BASE_URL;
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,8 +15,11 @@ import { useAuth } from "@/context/UserContext";
 import { useLogin } from "./useLogin";
 import { toast } from "sonner";
 import { useCookies } from "react-cookie";
+import { useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export function LoginAdmin() {
+  const [seePassword, setSeePassword] = useState(false);
   const [cookies, setCookie] = useCookies(["token"]);
   const { register, reset, handleSubmit } = useForm({
     email: "",
@@ -25,7 +27,7 @@ export function LoginAdmin() {
     role: "admin",
   });
   const { setUserDetail } = useAuth();
-  const { login, isLoading } = useLogin();
+  const { login, isPending } = useLogin();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -65,7 +67,7 @@ export function LoginAdmin() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                disabled={isLoading}
+                disabled={isPending}
                 required
                 {...register("email")}
               />
@@ -78,13 +80,27 @@ export function LoginAdmin() {
                 </Link>
               </div>
 
-              <Input
-                id="password"
-                type="password"
-                disabled={isLoading}
-                required
-                {...register("password")}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={seePassword ? "text" : "password"}
+                  disabled={isPending}
+                  required
+                  {...register("password")}
+                />
+
+                {!seePassword ? (
+                  <EyeOffIcon
+                    className="absolute right-2 bottom-2 cursor-pointer"
+                    onClick={() => setSeePassword(true)}
+                  />
+                ) : (
+                  <EyeIcon
+                    className="absolute right-2 bottom-2 cursor-pointer"
+                    onClick={() => setSeePassword(false)}
+                  />
+                )}
+              </div>
             </div>
 
             <div className="grid gap-2">
@@ -98,7 +114,7 @@ export function LoginAdmin() {
                 {...register("role")}
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>
           </form>

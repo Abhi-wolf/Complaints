@@ -5,13 +5,13 @@ const isauth = async (req, res, next) => {
   try {
     let token;
     let authHeader = req.headers.Authorization || req.headers.authorization;
-    console.log("authHeader :", authHeader);
+    // console.log("authHeader :", authHeader);
 
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
     }
 
-    console.log("token = ", token);
+    // console.log("token = ", token);
 
     if (!token || token === undefined) {
       return res.status(400).json({
