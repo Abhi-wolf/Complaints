@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { role } = useAuth();
   const isAllowed = allowedRoles.includes(role);
   // console.log(isAllowed);
-  console.log(role);
+  // console.log(role);
 
   const accessibleRoute = isAllowed
     ? children

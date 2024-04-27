@@ -15,14 +15,11 @@ import { useEffect } from "react";
 function Routers() {
   const { userName } = useAuth();
 
-  useEffect(
-    function () {
-      if (!userName === "") {
-        <Navigate to="/login-user" replace="true" />;
-      }
-    },
-    [userName]
-  );
+  useEffect(() => {
+    if (!userName === "") {
+      <Navigate to="/login-user" replace="true" />;
+    }
+  }, [userName]);
 
   return (
     <Routes>

@@ -58,7 +58,7 @@ function UserDashboard() {
   if (isPending) return <Spinner />;
 
   return (
-    <div className=" w-full min-h-[90vh] relative">
+    <div className=" w-[90vw] max-h-[100vh] relative overflow-y-scroll">
       <div className="flex flex-row mx-2 my-2 gap-4 justify-end mr-4 md:mr-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

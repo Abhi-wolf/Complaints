@@ -16,9 +16,8 @@ export async function getAllComplaintsAdmin(token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return complaints;
@@ -39,9 +38,8 @@ export async function getAllComplaint(token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return complaints;
@@ -68,9 +66,8 @@ export async function registerComplaint({ data }, token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return complaint;
@@ -90,17 +87,16 @@ export async function deleteComplaint({ id }, token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return {};
 }
 
 export async function getComplaint(id, token) {
-  console.log("token = ", token);
-  console.log("id = ", id);
+  // console.log("token = ", token);
+  // console.log("id = ", id);
 
   let complaint = {};
   try {
@@ -116,9 +112,8 @@ export async function getComplaint(id, token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return complaint;
@@ -148,9 +143,8 @@ export async function updateStatusOfComplaint({ data }, token) {
     console.log(err);
     if (err.response) {
       throw new Error(err.response.data.message);
-    } else {
-      throw new Error(err.message);
     }
+    throw new Error(err.message);
   }
 
   return response;

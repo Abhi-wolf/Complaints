@@ -10,9 +10,7 @@ function Header() {
   const { userName, role, userId } = useAuth();
 
   return (
-    <div
-      className={`min-w-full h-[80px] px-4 md:px-8 flex items-center justify-between shadow-xl shadow-indigo-500/50`}
-    >
+    <div className="min-w-full h-[80px] px-4 md:px-8 flex items-center justify-between shadow-xl shadow-indigo-500/50">
       <Logo />
       <div className="flex items-center gap-1 md:gap-4">
         <Link

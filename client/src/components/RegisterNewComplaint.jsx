@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,11 +17,11 @@ import { useRegisterComplaint } from "@/pages/Dashboard/useRegisterComplaint";
 import { toast } from "sonner";
 import { useState } from "react";
 
-export function RegisterNewComplaint() {
+export function RegisterNewComplaint({ isOpen, onClose }) {
   const { register, handleSubmit, reset } = useForm();
   const { registerNewComplaint, isPending } = useRegisterComplaint();
   const [document, setDocument] = useState(null);
-  const [isOpen, onClose] = useState(false);
+  // const [isOpen, onClose] = useState(false);
 
   function handleFile(e) {
     console.log(e.target.files[0]);
@@ -33,14 +34,16 @@ export function RegisterNewComplaint() {
       { data },
       {
         onSuccess: () => {
+          // console.log(res);
           reset();
           toast.success("Complaint successfully registered");
-          onClose(false);
+          onClose(!isOpen);
         },
         onError: (err) => {
           reset();
+          // console.log(err);
           toast.error(err.message);
-          onClose(false);
+          onClose(!isOpen);
         },
       }
     );
