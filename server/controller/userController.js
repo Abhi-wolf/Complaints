@@ -8,18 +8,18 @@ const registerController = async (req, res) => {
     //sara data pahle le lena h:
     const { name, email, phone, password, userid } = req.body;
 
-    console.log(
-      "name:",
-      name,
-      " email: ",
-      email,
-      " phone: ",
-      phone,
-      " userid: ",
-      userid,
-      " password: ",
-      password
-    );
+    // console.log(
+    //   "name:",
+    //   name,
+    //   " email: ",
+    //   email,
+    //   " phone: ",
+    //   phone,
+    //   " userid: ",
+    //   userid,
+    //   " password: ",
+    //   password
+    // );
 
     //validation of the user:
     if (!name || !email || !phone || !password || !userid) {
@@ -43,14 +43,14 @@ const registerController = async (req, res) => {
     // const salt = bcrypt.genSaltSync(10);
 
     // salt is used for number of times of encryption:
-    let hashPassword = await bcrypt.hash(password, 10);
+    // let hashPassword = await bcrypt.hash(password, 10);
 
     // create a new user:
     const user = await userModel.create({
       name,
       email,
       phone,
-      password: hashPassword,
+      password,
       userid,
     });
 
@@ -156,7 +156,9 @@ const loginController = async (req, res) => {
 const getUserController = async (req, res) => {
   try {
     //first  find the user:
-    const user = await userModel.findById({ _id: req.user.id });
+    const user = await userModel
+      .findById({ _id: req.user.id })
+      .select("-password");
 
     //validation of the user , if not then return error:
     if (!user) {
@@ -166,7 +168,7 @@ const getUserController = async (req, res) => {
       });
     }
 
-    console.log(user);
+    // console.log(user);
 
     //send response:
     res.status(200).send({
@@ -188,8 +190,8 @@ const updateUserController = async (req, res) => {
   try {
     // first  find the user:
     const { id } = req.user;
-    let user = await userModel.findById({ _id: id });
-
+    const user = await userModel.findById({ _id: id });
+    console.log(req.body);
     //validation of the user:
     if (!user) {
       return res.status(404).json({
@@ -197,15 +199,18 @@ const updateUserController = async (req, res) => {
         message: "User Not found",
       });
     }
-    userData = await userModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    });
+    const updatedUser = await userModel
+      .findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      })
+      .select("-password");
+
     return res.status(200).json({
       message: "update successful",
       success: true,
-      userData,
+      updatedUser,
     });
   } catch (err) {
     console.log(err);

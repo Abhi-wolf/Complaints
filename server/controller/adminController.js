@@ -1,6 +1,8 @@
 const adminModel = require("../model/adminModel");
+const userModel = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const adminRegisterController = async (req, res) => {
   try {
     const { email, name, phone, idProof, password, role } = req.body;
@@ -23,13 +25,13 @@ const adminRegisterController = async (req, res) => {
         success: true,
       });
     }
-    let hashPassword = await bcrypt.hash(password, 10);
+    // let hashPassword = await bcrypt.hash(password, 10);
     const user = await adminModel.create({
       name,
       email,
       phone,
       idProof,
-      password: hashPassword,
+      password,
       role,
     });
     return res.status(200).json({
@@ -56,14 +58,17 @@ const adminLoginController = async (req, res) => {
     const user = await adminModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json({
-        messgae: "user not found",
+        messgae: "User not found",
         success: false,
       });
     }
-    let compare = await bcrypt.compare(password, user.password);
+    const compare = await bcrypt.compare(password, user.password);
+
+    console.log("password match = ", compare);
+
     if (!compare) {
-      return res.stauts(401).json({
-        message: "credentials donot match",
+      return res.status(401).json({
+        message: "Credentials do not match",
         success: false,
       });
     }
@@ -84,13 +89,14 @@ const adminLoginController = async (req, res) => {
     var { email, name, _id: id, role } = user;
 
     return res.cookie("token", token, options).status(200).json({
-      message: "admin login successful",
+      message: "Admin login successful",
       data: { email, name, id, role, token },
       success: true,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
-      message: "error in login",
+      message: "Error in login",
       success: false,
     });
   }
@@ -108,4 +114,106 @@ const adminLogout = async (req, res) => {
       success: true,
     });
 };
-module.exports = { adminRegisterController, adminLoginController, adminLogout };
+
+const getAdminController = async (req, res) => {
+  try {
+    //first  find the user:
+    const user = await adminModel
+      .findById({ _id: req.admin.id })
+      .select("-password");
+
+    //validation of the user , if not then return error:
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User Not Found",
+      });
+    }
+
+    //send response:
+    res.status(200).send({
+      success: true,
+      message: "User get Successfully",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in Get admin API",
+      error,
+    });
+  }
+};
+
+const updateAdminController = async (req, res) => {
+  try {
+    // first  find the user:
+    const { id } = req.admin;
+    const user = await adminModel.findById({ _id: id });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User Not found",
+      });
+    }
+    const updatedUser = await adminModel
+      .findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      })
+      .select("-password");
+
+    return res.status(200).json({
+      message: "update successful",
+      success: true,
+      updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "error in updating",
+      success: false,
+    });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    //first  find the user:
+    const users = await userModel.find().select("-password");
+
+    //validation of the user , if not then return error:
+    if (!users) {
+      return res.status(404).send({
+        success: false,
+        message: "No user Found",
+      });
+    }
+
+    //send response:
+    res.status(200).send({
+      success: true,
+      message: "Successfull",
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in Get user API",
+      error,
+    });
+  }
+};
+
+module.exports = {
+  adminRegisterController,
+  adminLoginController,
+  adminLogout,
+  getAdminController,
+  updateAdminController,
+  getAllUsers,
+};

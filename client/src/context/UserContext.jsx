@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (role && userName && cookies.token) {
       // localStorage.setItem("user", user);
-      console.log("cookies = ", cookies);
+      // console.log("cookies = ", cookies);
       localStorage.setItem("userName", userName);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", userId);

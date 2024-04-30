@@ -11,6 +11,7 @@ import Complain from "@/pages/Complain/Complain";
 import AdminSettings from "@/pages/Settings/AdminSettings";
 import { useAuth } from "@/context/UserContext";
 import { useEffect } from "react";
+import AllUsersDashboard from "@/pages/Dashboard/AllUsersDashboard";
 
 function Routers() {
   const { userName } = useAuth();
@@ -59,6 +60,15 @@ function Routers() {
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
             <AdminSettings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/alluserdetails"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AllUsersDashboard />
           </ProtectedRoute>
         }
       />

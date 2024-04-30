@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
+import { ModeToggle } from "@/components/ModeToggle";
 
 function UserDashboard() {
   const { complaints, isPending } = useGetUserComplaints();
@@ -58,8 +59,8 @@ function UserDashboard() {
   if (isPending) return <Spinner />;
 
   return (
-    <div className=" w-[90vw] max-h-[100vh] relative overflow-y-scroll">
-      <div className="flex flex-row mx-2 my-2 gap-4 justify-end mr-4 md:mr-6">
+    <div className=" w-[90vw] max-h-[100vh] relative overflow-y-scroll ">
+      <div className="flex flex-row md:mx-2 my-2 gap-4 justify-end mr-4 md:mr-6 fixed top-2 right-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary">Sort</Button>
@@ -138,9 +139,12 @@ function UserDashboard() {
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* light dark mode */}
+        <ModeToggle />
       </div>
 
-      <div className=" flex flex-wrap gap-5 justify-center mx-4 my-8">
+      <div className=" flex flex-wrap gap-5 justify-center mx-4 my-8 mt-16">
         {filTeredComplaints.length === 0 ? (
           <NoData />
         ) : (

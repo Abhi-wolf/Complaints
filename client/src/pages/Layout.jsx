@@ -17,7 +17,7 @@ function Layout() {
         {openSideBar && role && <SideBar setOpenSideBar={setOpenSideBar} />}
         {!openSideBar && role && (
           <Button onClick={() => setOpenSideBar(true)} variant="ghost">
-            <DoubleArrowRightIcon className="w-5 h-8" />
+            <DoubleArrowRightIcon className="w-4 md:w-5 h-4 md:h-8" />
           </Button>
         )}
         <Routers />

@@ -102,7 +102,7 @@ function ComplaintCard({ complain, view }) {
 
   return (
     <div>
-      <Card className="w-[350px] md:w-[450px]">
+      <Card className="w-[300px] md:w-[450px]">
         <CardHeader>
           <CardTitle className="text-slate-500">{fullName}</CardTitle>
         </CardHeader>

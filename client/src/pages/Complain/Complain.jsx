@@ -1,6 +1,4 @@
-import { useParams } from "react-router-dom";
 import { useGetComplaint } from "./useGetComplain";
-import { Badge } from "@/components/ui/badge";
 import ComplaintCard from "@/components/ComplaintCard";
 import DescriptionCard from "@/components/DescriptionCard";
 
@@ -12,7 +10,7 @@ function Complain() {
   if (!complaint) return <div>No Complaint</div>;
 
   return (
-    <div className=" m-4 md:m-6 min-h-[86vh] ">
+    <div className=" w-[90vw] max-h-[100vh] relative overflow-y-scroll mt-8 ">
       <div className=" flex flex-col-reverse md:flex-row justify-evenly  md:items-center gap-6 md:gap-4 w-full h-full">
         <ComplaintCard complain={complaint} />
         <div className=" flex justify-center items-center">
