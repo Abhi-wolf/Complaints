@@ -31,6 +31,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "user",
   },
+  OTP: {
+    type: Number,
+    default: null,
+    minLength: [6, "Minimum Length of OTP is 6"],
+    maxLength: [6, "Maximum Length of OTP is 6"],
+  },
+  OTPExpires: {
+    type: Date,
+    default: null,
+  },
 });
 
 module.exports = mongoose.model("user", userSchema);

@@ -78,12 +78,21 @@ export const columns = [
     header: "Role",
     cell: ({ row }) => (
       <div className="capitalize">
-        <Badge>{row?.getValue("role")}</Badge>
+        <Badge
+          className={`${
+            row?.getValue("role") === "admin" ? "bg-orange-600" : "bg-green-600"
+          }`}
+        >
+          {row?.getValue("role")}
+        </Badge>
       </div>
     ),
   },
 ];
 function UserTable({ data }) {
+  console.log(data);
+  console.log(data?.length);
+
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});

@@ -57,9 +57,9 @@ const adminLoginController = async (req, res) => {
 
     const user = await adminModel.findOne({ email: email });
     if (!user) {
-      return res.status(400).json({
-        messgae: "User not found",
+      return res.status(404).json({
         success: false,
+        message: "User not found",
       });
     }
     const compare = await bcrypt.compare(password, user.password);
@@ -183,15 +183,19 @@ const updateAdminController = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     //first  find the user:
-    const users = await userModel.find().select("-password");
+    const allUsers = await userModel.find().select("-password");
+    const admins = await adminModel.find().select("-password");
 
     //validation of the user , if not then return error:
-    if (!users) {
+    if (!allUsers && !admins) {
       return res.status(404).send({
         success: false,
         message: "No user Found",
       });
     }
+
+    const users = [...allUsers, ...admins];
+    console.log(users);
 
     //send response:
     res.status(200).send({

@@ -285,10 +285,144 @@ const logout = async (req, res) => {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     })
     .json({
-      message: "logout successful!",
+      message: "Logout successfull!",
       success: false,
     });
 };
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // console.log("email = ", req.body);
+    // console.log("email = ", email);
+
+    const user = await userModel.findOne({ email });
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log(otp);
+    const validUpto = Date.now() + 1000 * 60 * 15;
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "31golu.s@gmail.com", // your email
+        pass: "gzem eiqq lmiw rbqe", // your password
+      },
+    });
+    let mailOptions = {
+      from: "31golu.s@gmail.com", // sender email address
+      to: email, //   receivers email address
+      subject: "OTP to reset yout password", // Subject line
+      html: `<p> Your OTP to reset password is ${otp} <br> This is OTP is valid for 15 minutes</p>`, // HTML body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
+    // console.log(user);
+
+    if (user?.email) {
+      user.OTP = otp;
+      user.OTPExpires = validUpto;
+
+      console.log(user);
+
+      await user.save();
+    }
+
+    return res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In Update Password API",
+      error,
+    });
+  }
+};
+
+const verifyOTP = async (req, res) => {
+  const { email, otp } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const currTime = Date.now();
+
+    const curr = new Date(currTime);
+    const database = new Date(user.OTPExpires);
+    const differenceInMilliseconds = curr.getTime() - database.getTime();
+    const differenceInMinutes = differenceInMilliseconds / 60000;
+
+    if (user.OTPExpires === null || differenceInMinutes > 15) {
+      return res.status(404).json({ message: "OTP expired" });
+    }
+
+    if (user?.OTP != otp) {
+      return res.status(404).json({ message: "OTP is not valid" });
+    }
+
+    res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In Update Password API",
+      error,
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { email, otp, password } = req.body;
+  console.log(req.body);
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const currTime = Date.now();
+
+    const curr = new Date(currTime);
+    const database = new Date(user.OTPExpires);
+    const differenceInMilliseconds = curr.getTime() - database.getTime();
+    const differenceInMinutes = differenceInMilliseconds / 60000;
+
+    if (user.OTPExpires === null || differenceInMinutes > 15) {
+      return res.status(404).json({ message: "OTP expired" });
+    }
+
+    if (user?.OTP != otp) {
+      return res.status(404).json({ message: "OTP is not valid" });
+    }
+
+    // console.log("password = ", password);
+    user.password = password;
+    user.OTP = null;
+    user.OTPExpires = null;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successfull" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In Update Password API",
+      error,
+    });
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
@@ -296,4 +430,7 @@ module.exports = {
   updateUserController,
   updatePasswordController,
   logout,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
 };

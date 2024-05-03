@@ -149,3 +149,31 @@ export async function updateStatusOfComplaint({ data }, token) {
 
   return response;
 }
+
+// update complaint
+export async function updateComplaint({ data }, token) {
+  let complaint = {};
+
+  try {
+    const res = await axios.patch(
+      `${apiURL}/complaint/update-details/${data._id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    complaint = res.data;
+    console.log(complaint);
+  } catch (err) {
+    console.log(err);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    }
+    throw new Error(err.message);
+  }
+
+  return complaint;
+}

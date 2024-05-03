@@ -12,7 +12,7 @@ import { RegisterNewComplaint } from "./RegisterNewComplaint";
 function SideBar({ setOpenSideBar }) {
   const [isOpen, onClose] = useState(false);
 
-  const { setUserDetail, userName, role, userId } = useAuth();
+  const { setUserDetail, role, userId } = useAuth();
   const [cookies, setCookie] = useCookies(["token"]);
 
   const navigate = useNavigate();

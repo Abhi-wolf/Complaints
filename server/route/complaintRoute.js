@@ -25,9 +25,15 @@ router.post(
   upload.fields([{ name: "idProofPdf" }, { name: "writtenComplaint" }]),
   registerComplaint
 );
+router.patch(
+  "/update-details/:id",
+  isauth,
+  upload.fields([{ name: "idProofPdf" }, { name: "writtenComplaint" }]),
+  updateComplaint
+);
 
 router.get("/get-allcomplaint", isadmin, getAllComplaint);
-router.put("/update-details/:id", isauth, updateComplaint);
+// router.patch("/update-details/:id", isauth, updateComplaint);
 router.delete("/delete-complaint", isauth, deleteComplaint);
 router.get("/get-usercomplaints", isauth, getUserComplaints);
 router.get("/get-complaint/:id", isAuthorized, isAdminOrUser, getComplaint);

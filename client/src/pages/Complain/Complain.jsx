@@ -25,7 +25,10 @@ function Complain() {
           </div>
         </div>
       </div>
-      <DescriptionCard description={complaint?.description} />
+      <DescriptionCard
+        description={complaint?.description}
+        complaint={complaint}
+      />
     </div>
   );
 }

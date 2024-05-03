@@ -12,6 +12,7 @@ import AdminSettings from "@/pages/Settings/AdminSettings";
 import { useAuth } from "@/context/UserContext";
 import { useEffect } from "react";
 import AllUsersDashboard from "@/pages/Dashboard/AllUsersDashboard";
+import ForgotPassword from "@/pages/Authentication/ForgotPassword";
 
 function Routers() {
   const { userName } = useAuth();
@@ -28,6 +29,7 @@ function Routers() {
       <Route path="/login-user" element={<LoginUser />} />
       <Route path="/login-admin" element={<LoginAdmin />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/forgotPassword" element={<ForgotPassword />} />
       <Route
         path="/user/dashboard/:id"
         element={

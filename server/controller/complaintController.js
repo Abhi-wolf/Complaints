@@ -61,7 +61,7 @@ const registerComplaint = async (req, res) => {
     return res.status(200).json({
       message: "complaint Registered",
       success: true,
-      data: data,
+      // data: data,
     });
   } catch (err) {
     console.log(err);
@@ -96,23 +96,59 @@ const getAllComplaint = async (req, res) => {
 };
 const updateComplaint = async (req, res) => {
   const { id } = req.params;
-  let data = await complaintModel.findById(id);
-  if (!data) {
-    return res.status(404).json({
-      message: "complaint not found",
+
+  try {
+    const {
+      fullName,
+      fatherName,
+      email,
+      phone,
+      idProofNumber,
+      address,
+      description,
+    } = req.body;
+
+    let data = await complaintModel.findById(id);
+    if (!data) {
+      return res.status(404).json({
+        message: "complaint not found",
+        success: false,
+      });
+    }
+
+    const pdfFile1 = req.files?.idProofPdf?.[0]?.path; //multiple pdf image videos upload through this
+    const uploadpdf1 = await uploadCloudinary.uploadOnCloudinary(pdfFile1);
+
+    const complaintData = await complaintModel.findByIdAndUpdate(
+      id,
+      {
+        fullName,
+        fatherName,
+        email,
+        phone,
+        idProofNumber,
+        address,
+        description,
+        idProofPdf: uploadpdf1 && uploadpdf1.url,
+      },
+      {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      }
+    );
+    return res.status(200).json({
+      message: "Complaint updated successfully",
+      success: true,
+      complaintData,
+    });
+  } catch (error) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Error in updating complaint",
       success: false,
     });
   }
-  complaintData = await complaintModel.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-  return res.status(200).json({
-    message: "complaint updated successfully",
-    success: true,
-    complaintData,
-  });
 };
 const deleteComplaint = async (req, res) => {
   const { id } = req.body;

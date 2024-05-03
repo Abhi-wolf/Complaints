@@ -7,6 +7,9 @@ const {
   updateUserController,
   updatePasswordController,
   logout,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
 } = require("../controller/userController");
 const {
   hashPasswordMiddleware,
@@ -19,6 +22,9 @@ router.post("/login", loginController);
 router.get("/getuser", isauth, getUserController);
 router.put("/updateuser", isauth, hashPasswordMiddleware, updateUserController);
 router.post("/updatepassword", isauth, updatePasswordController);
+router.post("/forgotpassword", forgotPassword);
+router.post("/verifyOTP", verifyOTP);
+router.post("/resetpassword", hashPasswordMiddleware, resetPassword);
 
 router.post("/logout", isauth, logout);
 module.exports = router;

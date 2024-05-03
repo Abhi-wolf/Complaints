@@ -43,6 +43,7 @@ export function LoginAdmin() {
           navigate(`/admin/dashboard/${user.data.id}`);
         },
         onError: (err) => {
+          console.log(err.message);
           toast.error(err.message);
           navigate("/login-admin");
         },
@@ -75,7 +76,10 @@ export function LoginAdmin() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link to="#" className="ml-auto inline-block text-sm underline">
+                <Link
+                  to="/forgotPassword"
+                  className="ml-auto inline-block text-sm underline"
+                >
                   Forgot your password?
                 </Link>
               </div>

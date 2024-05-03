@@ -31,11 +31,6 @@ export async function login({ data }) {
   } catch (err) {
     console.log(err);
     if (err.response) {
-      // The request was made and the server responded with a status code
-      console.log(err.response.data); // Server response data
-      console.log(err.response.status); // Status code
-      console.log(err.response.headers); // Response headers
-
       throw new Error(err.response.data.message);
     }
     throw new Error(err.message);
@@ -118,7 +113,7 @@ export async function updateAdmin({ data }, token) {
 
 export async function getAllUsers(token) {
   // console.log("id = ", id);
-  console.log("token = ", token);
+  // console.log("token = ", token);
   let user = [];
 
   try {
@@ -128,10 +123,60 @@ export async function getAllUsers(token) {
       },
     });
     user = res?.data?.users;
-    console.log(res.data?.users);
+    // console.log(res.data?.users);
   } catch (error) {
     console.log(error);
   }
 
   return user;
+}
+
+export async function sendOTP(email) {
+  console.log(email);
+  // let userDetail = {};
+  try {
+    const res = await axios.post(`${apiURL}/user/forgotpassword`, { email });
+    // userDetail = res.data;
+    console.log(res);
+    return res;
+  } catch (err) {
+    console.log(err);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    }
+    throw new Error(err.message);
+  }
+
+  // return userDetail;
+}
+
+// verifyOTP
+export async function verifyOTP({ data }) {
+  console.log(data);
+  try {
+    const res = await axios.post(`${apiURL}/user/verifyOTP`, data);
+    return res.data;
+  } catch (err) {
+    console.log(err.response.data);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    }
+    throw new Error(err.message);
+  }
+}
+
+// reset password
+export async function resetPassword({ data }) {
+  console.log(data);
+  try {
+    const res = await axios.post(`${apiURL}/user/resetpassword`, data);
+    console.log(res);
+    return res;
+  } catch (err) {
+    console.log(err.response.data);
+    if (err.response) {
+      throw new Error(err.response.data.message);
+    }
+    throw new Error(err.message);
+  }
 }

@@ -7,6 +7,7 @@ function AllUsersDashboard() {
 
   if (isPending) return <Spinner />;
   if (!users) return <div>No data present</div>;
+  console.log(users);
 
   return (
     <div className="w-[80vw] md:w-[90vw] max-h-[100vh] md:min-h-[100vh] relative overflow-y-scroll  ">

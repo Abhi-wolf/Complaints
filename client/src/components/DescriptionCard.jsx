@@ -10,9 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { useState } from "react";
+import { UpdateComplaint } from "./UpdateComplaint";
 
-function DescriptionCard({ description = "" }) {
+function DescriptionCard({ description = "", complaint }) {
   const { role } = useAuth();
+  const [isOpen, onClose] = useState(false);
 
   return (
     <div className="mt-8">
@@ -28,9 +31,19 @@ function DescriptionCard({ description = "" }) {
           </div>
         </CardContent>
         <CardFooter className="flex justify-center md:justify-end">
-          {role === "user" && <Button>Update</Button>}
+          {role === "user" && (
+            <Button onClick={() => onClose(true)}>Update</Button>
+          )}
         </CardFooter>
       </Card>
+
+      {isOpen && (
+        <UpdateComplaint
+          isOpen={isOpen}
+          onClose={onClose}
+          complaint={complaint}
+        />
+      )}
     </div>
   );
 }
